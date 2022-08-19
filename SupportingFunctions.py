@@ -47,22 +47,39 @@ class MongoPrintOperations:
 
 class GenericDatabasePopulator:
 
+	mysql_data = []
+	mongodb_data = []
+	# firstNames and lastNames are selected using a random function. The idea is to generate pseudo-unique data that is readily queryable. 
+	firstNames = ['George','John','Thomas','James','John','Andrew','Zachary','Millard','Franklin','Abraham']
+	lastNames = ['Washington','Adams','Jefferson','Madison','Monroe','Jackson','Tyler','Polk','Taylor','Fillmore']
+
 	# TO-DO
-	# I want to make this generic so that it returns a different dataset depending on the parameters. 
+	# I want to make this generic so that it returns a different dataset depending on the parameters.
 	# Also, maybe I should think about storing the data in such a way that allows me to use the exact same data in both database.
-	def generateDocuments(self, size, isSQL, isNoSQL): 
-		firstNames = ['George','John','Thomas','James','John','Andrew','Zachary','Millard','Franklin','Abraham']
-		lastNames = ['Washington','Adams','Jefferson','Madison','Monroe','Jackson','Tyler','Polk','Taylor','Fillmore']
+	def generateDocuments(self, size, isSQL):
 		values = []
+		if len(self.mysql_data) != size or len(self.mongodb_data) != size: # Objective: Only generate the data if it does not match the size or is empty. 
+			self.populateDataArrays(size)
+		if isSQL is True:
+			return self.mysql_data;
+		if isSQL is False:
+			return self.mongodb_data;
+
+	def populateDataArrays(self, size): # I only want this method to be called if data has not been generated or if the size of the data structure does not match the size parameter. 
 		print("Beginning generation of documents...")
 		start = time.time()
 		for x in range(size):
-			doc = {"place":x,'num':int(random()*1000),"first_name":firstNames[int(random()*10)], "last_name":lastNames[int(random()*10)]}
-			values.append(doc)	
+			place = x
+			num = int(random()*1000)
+			firstName = self.firstNames[int(random()*10)]
+			lastName = self.lastNames[int(random()*10)]
+			doc = {"place":place,'num':num,"first_name":firstName, "last_name":lastName} # This is a doc for MongoDB.
+			self.mongodb_data.append(doc)
+			entry = {place, num, firstName, lastName} # This is an entry for MySQL.
+			self.mysql_data.append(entry)
 		end = time.time()
 		print("Documents have been generated. Time: ", end-start)
 
-		return values;
 
 class MongoDatabasePopulator:
 
