@@ -1,7 +1,6 @@
 import unittest
 import SupportingFunctions
 
-# Unit Tests 
 class TestStringMethods(unittest.TestCase):
 
     def test_genericDatabasePopulator_MySQL(self):
@@ -21,7 +20,11 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue(10 == len(sql))
         self.assertTrue(10 == len(docs))
 
-    def test_verifyContent
+    def test_verifyContent_MySQL(self):
+    	populator = SupportingFunctions.GenericDatabasePopulator()
+    	sql = populator.generateDocuments(10, True)
+    	print(sql[0])
+
 
 if __name__ == '__main__':
     unittest.main()

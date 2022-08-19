@@ -61,9 +61,9 @@ class GenericDatabasePopulator:
 		if len(self.mysql_data) != size or len(self.mongodb_data) != size: # Objective: Only generate the data if it does not match the size or is empty. 
 			self.populateDataArrays(size)
 		if isSQL is True:
-			return self.mysql_data;
+			return self.mysql_data
 		if isSQL is False:
-			return self.mongodb_data;
+			return self.mongodb_data
 
 	def populateDataArrays(self, size): # I only want this method to be called if data has not been generated or if the size of the data structure does not match the size parameter. 
 		print("Beginning generation of documents...")
@@ -74,8 +74,10 @@ class GenericDatabasePopulator:
 			firstName = self.firstNames[int(random()*10)]
 			lastName = self.lastNames[int(random()*10)]
 			doc = {"place":place,'num':num,"first_name":firstName, "last_name":lastName} # This is a doc for MongoDB.
+			# Note: The doc will be unordered. This isn't necessarily a problem for MongoDB. 
 			self.mongodb_data.append(doc)
-			entry = {place, num, firstName, lastName} # This is an entry for MySQL.
+			entry = (place, num, firstName, lastName) # This is an entry for MySQL.
+			# Note: Python Dictionaries are unordered, so using a dictionary for the entry would cause insertion mismatch errors. I need to use a list or a tuple. 
 			self.mysql_data.append(entry)
 		end = time.time()
 		print("Documents have been generated. Time: ", end-start)
