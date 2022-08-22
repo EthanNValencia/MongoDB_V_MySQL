@@ -56,9 +56,11 @@ class GenericDatabasePopulator:
 	# TO-DO
 	# I want to make this generic so that it returns a different dataset depending on the parameters.
 	# Also, maybe I should think about storing the data in such a way that allows me to use the exact same data in both database.
-	def generateDocuments(self, size, isSQL):
+	def generate(self, size, isSQL):
 		values = []
 		if len(self.mysql_data) != size or len(self.mongodb_data) != size: # Objective: Only generate the data if it does not match the size or is empty. 
+			self.mysql_data.clear()
+			self.mongodb_data.clear()
 			self.populateDataArrays(size)
 		if isSQL is True:
 			return self.mysql_data
@@ -83,7 +85,7 @@ class GenericDatabasePopulator:
 		print("Documents have been generated. Time: ", end-start)
 
 
-class MongoDatabasePopulator:
+class MongoInsertOperations:
 
 	def insertOneDocument(self, collection):
 		document = {"first_name":"Abraham", "last_name":"Lincoln"}
