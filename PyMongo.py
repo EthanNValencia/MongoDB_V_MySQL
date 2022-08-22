@@ -8,41 +8,40 @@ cluster = MongoClient(ConnectionURLs.mongodb_url)
 db = cluster["test"]
 collection = db["database"]
 
-generator = SupportingFunctions.GenericDatabasePopulator()
+generator = SupportingFunctions.GenericDataGenerator()
 
-inserting = SupportingFunctions.MongoInsertOperations()
-deleting = SupportingFunctions.MongoDeleteOperations()
-printing = SupportingFunctions.MongoPrintOperations()
-finding = SupportingFunctions.MongoFindOperations()
+insert = SupportingFunctions.MongoInsertOperations()
+delete = SupportingFunctions.MongoDeleteOperations()
+console = SupportingFunctions.MongoPrintOperations()
+find = SupportingFunctions.MongoFindOperations()
 
-printing.printCollectionCount(collection)
+console.print_collection_count(collection)
 
 documents = generator.generate(10, False) # Generates the data documents. 
-inserting.insertDocuments(collection, documents)
+insert.insert_documents(collection, documents)
 
-results = finding.findDocuments({"first_name":"Abraham"}, collection)
+results = find.find_documents({"first_name":"Abraham"}, collection)
 
-printing.printResultsSize(results)
+console.print_results_size(results)
 
-deleting.deleteAll(collection)
-
+delete.delete_all(collection)
 
 # Syntax Examples 
 
 # print(type(collection))
 
-# printing.printCollection(newCollection)
+# console.print_collection(newCollection)
 
 # collection.insert_one(document1) # inserts one document
 
 # collection.insert_many([document1, document2]) # inserts two documents
 
-# printing.printResultsSize(results)
+# console.print_results_size(results)
 
-# printing.printResults(results) # This isn't useful when dealing with large result sets. 
+# console.print_results(results) # This isn't useful when dealing with large result sets. 
 
 # results = collection.find({"first_name":"Abraham", "last_name":"Lincoln"}) 
 
 # results = collection.find({"first_name":"Fred"})
 
-# deleting.deleteResults(collection, results)
+# delete.delete_results(collection, results)

@@ -4,7 +4,7 @@ from random import random
 
 class MongoDeleteOperations:
 
-	def deleteResults(self, collection, results):
+	def delete_results(self, collection, results):
 		for result in results:
 			print("Deleting: ", result)
 			start = time.time()
@@ -12,7 +12,7 @@ class MongoDeleteOperations:
 			end = time.time()
 			print("Document deleted from MongoDB. Time: ", end-start)
 
-	def deleteAll(self, collection):
+	def delete_all(self, collection):
 		print("Deleting all documents from MongoDB...")
 		start = time.time()
 		collection.delete_many({})
@@ -21,16 +21,16 @@ class MongoDeleteOperations:
 
 class MongoPrintOperations:
 
-	def printResults(self, results):
+	def print_results(self, results):
 		for result in results:
 			print(result)
 			print(result["_id"])
 
-	def printCollection(self, collection):
+	def print_collection(self, collection):
 		for item in collection:
 			print(item)
 
-	def printResultsSize(self, results):
+	def print_results_size(self, results):
 		counter = 0
 		print("Counting the result set...")
 		start = time.time()
@@ -40,12 +40,12 @@ class MongoPrintOperations:
 		print("Result set has been counted. Time: ", end-start)
 		print("Total size of the returned result set is: ", counter)
 
-	def printCollectionCount(self, collection):
+	def print_collection_count(self, collection):
 		post_count = collection.count_documents({})
 		print("Results size is: ", post_count)
 
 
-class GenericDatabasePopulator:
+class GenericDataGenerator:
 
 	mysql_data = []
 	mongodb_data = []
@@ -53,21 +53,18 @@ class GenericDatabasePopulator:
 	firstNames = ['George','John','Thomas','James','John','Andrew','Zachary','Millard','Franklin','Abraham']
 	lastNames = ['Washington','Adams','Jefferson','Madison','Monroe','Jackson','Tyler','Polk','Taylor','Fillmore']
 
-	# TO-DO
-	# I want to make this generic so that it returns a different dataset depending on the parameters.
-	# Also, maybe I should think about storing the data in such a way that allows me to use the exact same data in both database.
-	def generate(self, size, isSQL):
+	def generate(self, size, returnSQL):
 		values = []
 		if len(self.mysql_data) != size or len(self.mongodb_data) != size: # Objective: Only generate the data if it does not match the size or is empty. 
 			self.mysql_data.clear()
 			self.mongodb_data.clear()
-			self.populateDataArrays(size)
-		if isSQL is True:
+			self.populate_data_arrays(size)
+		if returnSQL is True:
 			return self.mysql_data
-		if isSQL is False:
+		if returnSQL is False:
 			return self.mongodb_data
 
-	def populateDataArrays(self, size): # I only want this method to be called if data has not been generated or if the size of the data structure does not match the size parameter. 
+	def populate_data_arrays(self, size): # I only want this method to be called if data has not been generated or if the size of the data structure does not match the size parameter. 
 		print("Beginning generation of documents...")
 		start = time.time()
 		for x in range(size):
@@ -96,20 +93,7 @@ class MongoInsertOperations:
 		document2 = {"first_name":"Alfred", "last_name":"Polk"}
 		collection.insert_many([document1, document2])
 
-	def generateDocuments(self, size):
-		firstNames = ['George','John','Thomas','James','John','Andrew','Zachary','Millard','Franklin','Abraham']
-		lastNames = ['Washington','Adams','Jefferson','Madison','Monroe','Jackson','Tyler','Polk','Taylor','Fillmore']
-		values = []
-		print("Beginning generation of documents...")
-		start = time.time()
-		for x in range(size):
-			doc = {"place":x,'num':int(random()*1000),"first_name":firstNames[int(random()*10)], "last_name":lastNames[int(random()*10)]}
-			values.append(doc)
-		end = time.time()
-		print("Documents have been generated. Time: ", end-start)
-		return values;
-
-	def insertDocuments(self, collection, documents):
+	def insert_documents(self, collection, documents):
 		print("Beginning insertion of documents...")
 		start = time.time()
 		collection.insert_many(documents) # Inserts the documents into MongoDB. 
@@ -118,10 +102,32 @@ class MongoInsertOperations:
 
 class MongoFindOperations:
 
-	def findDocuments(self, criteria, collection): # This function doesn't take much time. It doesn't do what you think it does. 
+	def find_documents(self, criteria, collection): # This function doesn't take much time. It doesn't do what you think it does. 
 		print("Searching for: ", criteria)
 		start = time.time()
 		results = collection.find(criteria) # TO-DO: Look into what .find() is really doing under the hood. 
 		end = time.time()
 		print("MongoDB has been searched. Time: ", end-start) 
 		return results
+
+class MySQLInsertOperations:
+
+	def insert_many(self, values, myCursor, mydb):
+		sql = "INSERT INTO data_table (place, num, first_name, last_name) VALUES (%s, %s, %s, %s)"
+		print("Beginning insertion of entries...")
+		start = time.time()
+		myCursor.executemany(sql, values)
+		mydb.commit()
+		end = time.time()
+		print(myCursor.rowcount, "was inserted.", "Time: ", end-start)
+
+class MySQLDeleteOperations:
+
+	def delete_all(self, myCursor, mydb):
+		sql = "DELETE FROM data_table"
+		print("Beginning deletion of all entries...")
+		start = time.time()
+		myCursor.execute(sql)
+		mydb.commit()
+		end = time.time()
+		print("Delete Time: ", end-start)
