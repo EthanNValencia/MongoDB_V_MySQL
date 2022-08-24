@@ -13,11 +13,11 @@ class MongoDeleteOperations:
 			print("Document deleted from MongoDB. Time: ", end-start)
 
 	def delete_all(self, collection):
-		print("Deleting all documents from MongoDB...")
+		# print("Deleting all documents from MongoDB...")
 		start = time.time()
 		collection.delete_many({})
 		end = time.time()
-		print("All documents deleted. Time: ", end-start)
+		print("Mongo Delete All Time: ", end-start)
 
 class MongoPrintOperations:
 
@@ -94,16 +94,16 @@ class MongoInsertOperations:
 		collection.insert_many([document1, document2])
 
 	def insert_documents(self, collection, documents):
-		print("Beginning insertion of documents...")
+		# print("Beginning insertion of documents...")
 		start = time.time()
 		collection.insert_many(documents) # Inserts the documents into MongoDB. 
 		end = time.time()
-		print("All documents inserted into MongoDB. Time: ", end-start)
+		print("MongoDB All Insertion Time: ", end-start)
 
 class MongoFindOperations:
 
 	def find_documents(self, criteria, collection): # This function doesn't take much time. It doesn't do what you think it does. 
-		print("Searching for: ", criteria)
+		# print("Searching for: ", criteria)
 		start = time.time()
 		results = collection.find(criteria) # TO-DO: Look into what .find() is really doing under the hood. 
 		end = time.time()
@@ -114,30 +114,30 @@ class MySQLInsertOperations:
 
 	def insert_many(self, values, myCursor, mydb):
 		sql = "INSERT INTO data_table (place, num, first_name, last_name) VALUES (%s, %s, %s, %s)"
-		print("Beginning insertion of entries...")
+		# print("Beginning MySQL insertion of entries...")
 		start = time.time()
 		myCursor.executemany(sql, values)
 		mydb.commit()
 		end = time.time()
-		print(myCursor.rowcount, "was inserted.", "Time: ", end-start)
+		print("MySQL:", myCursor.rowcount, "was inserted.", "Time: ", end-start)
 
 class MySQLDeleteOperations:
 
 	def delete_all(self, myCursor, mydb):
 		sql = "DELETE FROM data_table"
-		print("Beginning deletion of all entries...")
+		# print("Beginning MySQL deletion of all entries...")
 		start = time.time()
 		myCursor.execute(sql)
 		mydb.commit()
 		end = time.time()
-		print("Delete Time:", end-start)
+		print("MySQL Delete All Time:", end-start)
 
 class MySQLFindOperations:
 
 	def select_last_name(self, criteria, myCursor):
 		sql = "SELECT * FROM data_table WHERE last_name = %s"
 		param = [criteria]
-		print("Beginning deletion of entries where last_name is", criteria)
+		# print("Beginning MySQL deletion of entries where last_name is", criteria)
 		start = time.time()
 		myCursor.execute(sql, param)
 		results = myCursor.fetchall()
