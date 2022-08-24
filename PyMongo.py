@@ -1,4 +1,5 @@
 # Ctrl+B to run in Sublime Text 3
+# Purpose: The purpose of this class is develop the MongoDB-side as an independent entry point. 
 import pymongo
 from pymongo import MongoClient
 import SupportingFunctions

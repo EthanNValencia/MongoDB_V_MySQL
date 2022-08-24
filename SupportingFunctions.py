@@ -107,7 +107,7 @@ class MongoFindOperations:
 		start = time.time()
 		results = collection.find(criteria) # TO-DO: Look into what .find() is really doing under the hood. 
 		end = time.time()
-		print("MongoDB has been searched. Time: ", end-start) 
+		print("MongoDB has been searched. Time: ", end-start)
 		return results
 
 class MySQLInsertOperations:
@@ -130,4 +130,17 @@ class MySQLDeleteOperations:
 		myCursor.execute(sql)
 		mydb.commit()
 		end = time.time()
-		print("Delete Time: ", end-start)
+		print("Delete Time:", end-start)
+
+class MySQLFindOperations:
+
+	def select_last_name(self, criteria, myCursor):
+		sql = "SELECT * FROM data_table WHERE last_name = %s"
+		param = [criteria]
+		print("Beginning deletion of entries where last_name is", criteria)
+		start = time.time()
+		myCursor.execute(sql, param)
+		results = myCursor.fetchall()
+		end = time.time()
+		print("Entries matching", criteria, "found:", len(results), "Time:", end-start)
+		return results

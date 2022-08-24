@@ -1,4 +1,5 @@
 # Ctrl+B to run in Sublime Text 3
+# Purpose: The purpose of this class is develop the MySQL-side as an independent entry point. 
 import mysql.connector
 import SupportingFunctions
 import ConnectionURLs
@@ -11,9 +12,12 @@ myCursor = mydb.cursor()
 generate = SupportingFunctions.GenericDataGenerator()
 insert = SupportingFunctions.MySQLInsertOperations()
 delete = SupportingFunctions.MySQLDeleteOperations()
+find = SupportingFunctions.MySQLFindOperations()
 
-values = generate.generate(2, True) # Working on this.
+values = generate.generate(20, True) # Working on this.
 
 insert.insert_many(values, myCursor, mydb)
+
+results = find.select_last_name('Washington', myCursor)
 
 delete.delete_all(myCursor, mydb)
