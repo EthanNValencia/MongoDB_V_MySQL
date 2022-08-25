@@ -30,7 +30,6 @@ def insert_all():
     mysql_insert.insert_many(mysql_data, myCursor, mysql_db)
     end = time.time()
     print("Total Insertion Time: ", end-start)
-    print()
 
 def delete_all():
     start = time.time()
@@ -38,13 +37,13 @@ def delete_all():
     mongo_delete.delete_all(collection)
     end = time.time()
     print("Total Delete Time: ", end-start)
-    print()
 
 def main():
-    print("Main Begin")
+    print("\nMain Begin\n")
     insert_all()
+    print()
     delete_all()
-    print("Main End")
+    print("\nMain End\n")
     # print(mysql_data)
     # print(mongo_data)
     # mysql_insert.insert_many(values, myCursor, mydb)
