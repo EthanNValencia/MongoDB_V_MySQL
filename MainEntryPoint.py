@@ -1,6 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 import mysql.connector
+import time
 import SupportingFunctions
 import ConnectionURLs
 
@@ -23,13 +24,26 @@ mongo_delete = SupportingFunctions.MongoDeleteOperations()
 mongo_console = SupportingFunctions.MongoPrintOperations()
 mongo_find = SupportingFunctions.MongoFindOperations()
 
-def main():
-    print("Main Begin")
+def insert_all():
+    start = time.time()
     mongo_insert.insert_documents(collection, mongo_data)
     mysql_insert.insert_many(mysql_data, myCursor, mysql_db)
-    
+    end = time.time()
+    print("Total Insertion Time: ", end-start)
+    print()
+
+def delete_all():
+    start = time.time()
     mysql_delete.delete_all(myCursor, mysql_db)
     mongo_delete.delete_all(collection)
+    end = time.time()
+    print("Total Delete Time: ", end-start)
+    print()
+
+def main():
+    print("Main Begin")
+    insert_all()
+    delete_all()
     print("Main End")
     # print(mysql_data)
     # print(mongo_data)
@@ -37,3 +51,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+### Size = 1000000
+### Mongo Insert All Time:   12.36253571510315
+### MySQL Insert All Time:  122.42020583152771
+### Total Insertion Time:   134.78274154663086
+
+### MySQL Delete All Time:   4.777234077453613
+### Mongo Delete All Time:  26.815054893493652
+### Total Deletion Time:    31.592288970947266

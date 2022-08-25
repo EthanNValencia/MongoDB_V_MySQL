@@ -65,7 +65,7 @@ class GenericDataGenerator:
 			return self.mongodb_data
 
 	def populate_data_arrays(self, size): # I only want this method to be called if data has not been generated or if the size of the data structure does not match the size parameter. 
-		print("Beginning generation of documents...")
+		print("Beginning generation of", size, "entries...")
 		start = time.time()
 		for x in range(size):
 			place = x
@@ -79,7 +79,7 @@ class GenericDataGenerator:
 			# Note: Python Dictionaries are unordered, so using a dictionary for the entry would cause insertion mismatch errors. I need to use a list or a tuple. 
 			self.mysql_data.append(entry)
 		end = time.time()
-		print("Documents have been generated. Time: ", end-start)
+		print("Entries have been generated. Time: ", end-start)
 
 
 class MongoInsertOperations:
@@ -98,7 +98,7 @@ class MongoInsertOperations:
 		start = time.time()
 		collection.insert_many(documents) # Inserts the documents into MongoDB. 
 		end = time.time()
-		print("MongoDB All Insertion Time: ", end-start)
+		print("Mongo Insert All Time: ", end-start)
 
 class MongoFindOperations:
 
@@ -119,7 +119,8 @@ class MySQLInsertOperations:
 		myCursor.executemany(sql, values)
 		mydb.commit()
 		end = time.time()
-		print("MySQL:", myCursor.rowcount, "was inserted.", "Time: ", end-start)
+		print("MySQL Insert All Time: ", end-start)
+		# print("MySQL:", myCursor.rowcount, "was inserted.", "Time: ", end-start)
 
 class MySQLDeleteOperations:
 
